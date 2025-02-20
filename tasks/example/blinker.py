@@ -14,7 +14,7 @@ import hardware_definition as hw
 # States and events.
 
 orange_LED = hw.orange_LED
-blue_LED = hw.green_LED
+blue_LED = hw.blue_LED
 
 speaker = hw.speaker
 

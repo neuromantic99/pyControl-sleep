@@ -4,6 +4,12 @@ from pyControl.utility import timed_goto_state, second, withprob, v
 
 import hardware_definition as hw
 
+orange_LED = hw.orange_LED
+blue_LED = hw.blue_LED
+
+speaker = hw.speaker
+speaker.set_volume(2)
+
 
 states = [
     "LED_on",
@@ -22,7 +28,7 @@ initial_state = "trial_start"
 board = Breakout_1_2()
 
 
-v.INTER_TRIAL_INTERVAL = 10 * second
+v.INTER_TRIAL_INTERVAL = 3 * second
 v.INTER_STIMULUS_INTERVAL = 0.5 * second
 v.SOUND_LENGTH = 0.5 * second
 v.LIGHT_ON_TIME = 0.5 * second
@@ -39,14 +45,11 @@ def trial_start(event: str) -> None:
 
 def sound_on(event: str) -> None:
     if event == "entry":
-        sound_frequency = 10000 if v.condition == 0 else 2000
-        # audio_output.sound(
-        #     sound_frequency
-        # )
+        sound_frequency = 1000 if v.condition == 0 else 2000
+        speaker.sine(sound_frequency)
         timed_goto_state("inter_stimulus_interval", v.SOUND_LENGTH)
     elif event == "exit":
-        # audio_output.stop()
-        pass
+        speaker.off()
 
 
 def inter_stimulus_interval(event: str) -> None:
@@ -56,17 +59,16 @@ def inter_stimulus_interval(event: str) -> None:
 
 def LED_on(event: str) -> None:
     if event == "entry":
-        led = hw.green_LED if v.condition == 0 else hw.orange_LED
+        led = hw.blue_LED if v.condition == 0 else hw.orange_LED
         led.LED.on()
         timed_goto_state("trial_start", v.INTER_STIMULUS_INTERVAL)
 
     elif event == "exit":
-        led = hw.green_LED if v.condition == 0 else hw.orange_LED
+        led = hw.blue_LED if v.condition == 0 else hw.orange_LED
         led.LED.off()
 
 
-# Run end behaviour
-
-
 def run_end():  # Turn off hardware at end of run.
-    blue_LED.off()
+    blue_LED.LED.off()
+    orange_LED.LED.off()
+    speaker.off()
