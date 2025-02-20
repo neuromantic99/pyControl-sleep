@@ -8,8 +8,6 @@ api_classes/
 controls_dialogs/
 !controls_dialogs/example*
 
-hardware_definitions/
-!hardware_definitions/example_hardware_definition.py
 
 
 !tasks/example

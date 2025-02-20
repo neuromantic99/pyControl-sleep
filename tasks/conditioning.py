@@ -68,7 +68,7 @@ def LED_on(event: str) -> None:
         led.LED.off()
 
 
-def run_end():  # Turn off hardware at end of run.
+def run_end() -> None:  # Turn off hardware at end of run.
     blue_LED.LED.off()
     orange_LED.LED.off()
     speaker.off()
