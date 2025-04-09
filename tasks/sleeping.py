@@ -12,7 +12,6 @@ blue_LED = hw.blue_LED
 speaker = hw.speaker
 
 
-
 states = [
     "LED_on",
     "sound_on",
@@ -23,8 +22,6 @@ states = [
 events = ["rsync"]
 
 initial_state = "trial_start"
-
-
 
 
 # State behaviour functions
@@ -39,25 +36,21 @@ v.LIGHT_ON_TIME = 0.5 * second
 
 v.previous_conditions = []
 v.condition = None
-v.n_trials_block = 0
-
 
 
 # 40 db 3 - 48 kHz
 # 70 db?
 
-# 10 and 30 
-def trial_start(event: str) -> None:
 
+# 10 and 30
+def trial_start(event: str) -> None:
     if event == "entry":
         v.condition = 0 if withprob(0.5) else 1
         if v.previous_conditions[-3:] == [v.condition] * 3:
             print("Switching condition to prevent 4 in a row")
-            v.condition = int(not(v.condition))
+            v.condition = int(not (v.condition))
         v.previous_conditions.append(v.condition)
         print(f"Starting trial with condition {v.condition}")
-        v.n_trials_block += 1
-
         timed_goto_state("LED_on", v.INTER_TRIAL_INTERVAL)
 
 
@@ -69,13 +62,11 @@ def LED_on(event: str) -> None:
 
     elif event == "exit":
         led = hw.blue_LED if v.condition == 0 else hw.orange_LED
-    
 
 
 def inter_stimulus_interval(event: str) -> None:
     if event == "entry":
         timed_goto_state("sound_on", v.INTER_STIMULUS_INTERVAL)
-        
 
 
 def sound_on(event: str) -> None:
@@ -92,7 +83,6 @@ def sound_on(event: str) -> None:
         timed_goto_state("trial_start", v.SOUND_LENGTH)
     elif event == "exit":
         speaker.off()
-
 
 
 def run_end() -> None:  # Turn off hardware at end of run.
