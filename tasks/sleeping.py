@@ -64,15 +64,12 @@ def trial_start(event: str) -> None:
 def LED_on(event: str) -> None:
     if event == "entry":
         led = hw.blue_LED if v.condition == 0 else hw.orange_LED
-        print(f"Turning on LED {led}")
-        led.LED.on()
+        print(f"Not turning on {led}")
         timed_goto_state("inter_stimulus_interval", v.LIGHT_ON_TIME)
 
     elif event == "exit":
         led = hw.blue_LED if v.condition == 0 else hw.orange_LED
-        led.LED.off()
-
-
+    
 
 
 def inter_stimulus_interval(event: str) -> None:
