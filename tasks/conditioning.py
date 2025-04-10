@@ -30,19 +30,25 @@ board = Breakout_1_2()
 
 
 v.INTER_TRIAL_INTERVAL = 10 * second
-v.INTER_STIMULUS_INTERVAL = 1 * second
+v.INTER_STIMULUS_INTERVAL = 0.5 * second
 v.SOUND_LENGTH = 0.5 * second
 v.LIGHT_ON_TIME = 0.5 * second
 
 v.previous_conditions = []
 v.condition = None
 
+'''
+Delivers two pairs of stimuli
 
-# 40 db 3 - 48 kHz
-# 70 db?
+v.condition = 0 -> blue LED + 3 kHz tone
+v.condition = 1 -> orange LED + 8 kHz tone
+
+Going for a 70 db tone which is 13 for both frequencies
+'''
+
+speaker.set_volume(13)
 
 
-# 10 and 30
 def trial_start(event: str) -> None:
     if event == "entry":
         v.condition = 0 if withprob(0.5) else 1
@@ -73,13 +79,7 @@ def inter_stimulus_interval(event: str) -> None:
 
 def sound_on(event: str) -> None:
     if event == "entry":
-        if v.condition == 0:
-            sound_frequency = 6000
-            speaker.set_volume(10)
-        else:
-            sound_frequency = 14000
-            speaker.set_volume(70)
-
+        sound_frequency = 3000 if v.condition == 0 else 8000
         speaker.sine(sound_frequency)
         print(f"Deliverying sound frequency {sound_frequency}")
         timed_goto_state("trial_start", v.SOUND_LENGTH)
