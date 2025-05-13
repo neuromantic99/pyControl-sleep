@@ -34,17 +34,19 @@ v.INTER_STIMULUS_INTERVAL = 0.5 * second
 v.SOUND_LENGTH = 0.5 * second
 v.LIGHT_ON_TIME = 0.5 * second
 
+v.LED_DUTY_CYCLE = 0.5
+
 v.previous_conditions = []
 v.condition = None
 
-'''
+"""
 Delivers two pairs of stimuli
 
 v.condition = 0 -> blue LED + 3 kHz tone
 v.condition = 1 -> orange LED + 8 kHz tone
 
 Going for a 70 db tone which is 13 for both frequencies
-'''
+"""
 
 speaker.set_volume(13)
 
@@ -64,7 +66,7 @@ def LED_on(event: str) -> None:
     if event == "entry":
         led = hw.blue_LED if v.condition == 0 else hw.orange_LED
         print(f"Turning on LED {led}")
-        led.LED.on()
+        led.LED.pulse(1000, v.LED_DUTY_CYCLE)
         timed_goto_state("inter_stimulus_interval", v.LIGHT_ON_TIME)
 
     elif event == "exit":
